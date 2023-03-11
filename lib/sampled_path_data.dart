@@ -4,19 +4,19 @@ import 'package:flutter/rendering.dart';
 /// In addition to the sampled points from both paths, it stores the
 /// indices of points that are at the beginning of a contour.
 class SampledPathData {
-  var points1;
-  var points2;
-  var endIndices;
-  var shiftedPoints;
+  List<Offset> points1;
+  List<Offset> points2;
+  List<int> endIndices;
+  List<Offset> shiftedPoints;
   bool points1IsClosed;
   bool points2IsClosed;
 
-  SampledPathData() {
-    points1 = List<Offset>();
-    points2 = List<Offset>();
-    shiftedPoints = List<Offset>();
-    endIndices = List<int>();
-    points1IsClosed = false;
-    points2IsClosed = false;
-  }
+  SampledPathData({
+    this.points1 = const <Offset>[],
+    this.points2 = const <Offset>[],
+    this.shiftedPoints = const <Offset>[],
+    this.endIndices = const <int>[],
+    this.points1IsClosed = false,
+    this.points2IsClosed = false,
+  });
 }

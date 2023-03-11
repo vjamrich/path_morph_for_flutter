@@ -14,7 +14,7 @@ class PathMorph {
     path1.computeMetrics().forEach((metric) {
       for (var i = 0.0; i < 1.1; i += precision) {
         Offset position =
-            metric.getTangentForOffset(metric.length * i).position;
+            metric.getTangentForOffset(metric.length * i)!.position;
         data.points1.add(position);
         data.shiftedPoints.add(position);
       }
@@ -24,7 +24,7 @@ class PathMorph {
       for (var i = 0.0; i < 1.1; i += precision) {
         k += 1;
         data.points2
-            .add(metric.getTangentForOffset(metric.length * i).position);
+            .add(metric.getTangentForOffset(metric.length * i)!.position);
       }
     });
 
@@ -34,10 +34,10 @@ class PathMorph {
     /// This way we can find more optimal pairs of points for smoother morphing.
     data.points1IsClosed = data.points1.first == data.points1.last ? true : false;
     data.points2IsClosed = data.points2.first == data.points2.last ? true : false;
-    if(data.points1IsClosed && data.points2IsClosed) {
+    if (true) {//(data.points1IsClosed && data.points2IsClosed) {
       double minSumDistSqrd = double.infinity;
-      int optimalIndex;
-      bool isReversed;
+      int optimalIndex = 0;
+      bool isReversed = false;
       for (int reversed = 0; reversed <= 1; reversed++) {
         if (reversed == 1) {
           data.points1 = List.from(data.points1.reversed);
@@ -50,21 +50,20 @@ class PathMorph {
           if (sumDistSqrd < minSumDistSqrd) {
             minSumDistSqrd = sumDistSqrd;
             optimalIndex = shiftIndex;
-            isReversed = reversed == 1 ? true : false;
+            isReversed = reversed == 1;
           }
           data.points1 = _shiftList(data.points1, 1);
         }
       }
       data.points1 = _shiftList(data.points1, optimalIndex);
-      data.points1 =
-      isReversed ? data.points1 : List.from(data.points1.reversed);
+      data.points1 = isReversed ? data.points1 : List.from(data.points1.reversed);
     }
     return data;
   }
 
   /// shift list by offset v
-  static List<Object> _shiftList(List<Object> list, int v) {
-    if(list == null || list.isEmpty) return list;
+  static List<Offset> _shiftList(List<Offset> list, int v) {
+    if(list.isEmpty) return list;
     var i = v % list.length;
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
